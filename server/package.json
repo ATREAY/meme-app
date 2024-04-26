@@ -5,7 +5,7 @@
     "start": "next start",
     "lint": "next lint",
     "server": "ts-node server.ts",
-    "build-server": "tsc server.ts"
+    "build-server": "ts-node server.ts"
   },
   "dependencies": {
     "@types/express": "^4.17.21",
