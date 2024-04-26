@@ -3,7 +3,7 @@ import cors from 'cors';
 import imageGenerator from './imageGenerator';
 
 const app = express();
-const port = 3001; // Choose a different port than 3000
+const port = 3001 || 0; // Choose a different port than 3000
 
 app.use(cors());
 app.use(express.json());
