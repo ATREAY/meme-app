@@ -11,6 +11,6 @@ app.use(express.json());
 // Mount the imageGenerator route
 app.post('/api/generate', imageGenerator);
 
-app.listen(port, () => {
+app.listen(port, '0.0.0.0', () => {
   console.log(`Server is running on port ${port}`);
 });
