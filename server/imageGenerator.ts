@@ -2,13 +2,16 @@ import { Request, Response } from 'express';
 import fetch from 'node-fetch';
 import { CohereClient } from 'cohere-ai';
 import sharp from 'sharp';
+import dotenv from "dotenv";
+
+dotenv.config({ path: './.env' });
 
 // Load the environment variables
-const stabilityApiKey = "sk-MNN7uTVEkOxauKt0tT2nxwVtWaoFdmADhrnEEWBQXHE6qvHb";
+const stabilityApiKey = process.env.STABILITY_API_KEY;
 const engineId = 'stable-diffusion-v1-6';
 const apiHost = 'https://api.stability.ai';
 const cohere = new CohereClient({
-  token: "Rdce48UhGe8Tl12zHSbgFdVEbZFDNzrXoiuMIA4e",
+  token: process.env.COHERE_API_KEY,
 });
 
 export default async function imageGenerator(req: Request, res: Response) {
@@ -118,7 +121,7 @@ async function renderTextToImage(text: string) {
     .composite([
       {
         input: Buffer.from(`<svg width="1024" height="512" xmlns="http://www.w3.org/2000/svg"><text x="10" y="30" font-family="Arial" font-size="24" fill="black">${text}</text></svg>`),
-        gravity: 'northwest', // Position the text at the top-left corner
+        gravity: 'north', // Position the text at the top corner
       },
     ])
     .png()

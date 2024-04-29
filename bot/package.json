@@ -17,6 +17,7 @@
     "@mistralai/mistralai": "^0.0.10",
     "cohere-ai": "^7.6.2",
     "dotenv": "^16.3.1",
+    "express": "^4.19.2",
     "node-fetch": "^3.3.2",
     "node-telegram-bot-api": "^0.64.0",
     "nodemon": "^3.0.2",
