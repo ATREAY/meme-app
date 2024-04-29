@@ -3,7 +3,6 @@ import fetch from "node-fetch";
 import dotenv from "dotenv";
 import { CohereClient } from "cohere-ai";
 import sharp from "sharp";
-import express from "express"; // Import Express
 
 dotenv.config();
 
@@ -19,16 +18,9 @@ const cohere = new CohereClient({
 // Initialize the Telegram Bot
 const bot = new TelegramBot(botToken, { polling: true });
 
-// Initialize Express
-const app = express();
-const port = process.env.PORT || 3000; // Use PORT environment variable or default to 3000
-
-// Define middleware to parse JSON bodies
-app.use(express.json());
-
-// Define route for handling '/img' command
-app.post("/img", async (req, res) => {
-  const { prompt, chatId } = req.body;
+bot.onText(/\/img (.+)/, async (msg, match) => {
+  const chatId = msg.chat.id;
+  const prompt = match[1];
   const processingMessage = await bot.sendMessage(
     chatId,
     "Generating image, please wait..."
@@ -43,6 +35,7 @@ app.post("/img", async (req, res) => {
     });
 
     const cohereText = cohereResponse.text || "";
+    console.log(cohereText);
 
     // Generate image using Stability AI
     const response = await fetch(
@@ -70,6 +63,7 @@ app.post("/img", async (req, res) => {
     }
 
     const responseJSON = await response.json();
+    console.log("Stability AI response:", responseJSON); // Log the response JSON
 
     const stabilityImages = [];
     responseJSON.artifacts.forEach((image, index) => {
@@ -94,11 +88,6 @@ app.post("/img", async (req, res) => {
       }
     );
   }
-});
-
-// Start the Express server
-app.listen(port, () => {
-  console.log(`Server is running on port ${port}`);
 });
 
 // Function to combine text from Cohere AI with Stability AI images
@@ -153,7 +142,7 @@ async function renderTextToImage(text) {
     ])
     .png()
     .toBuffer();
-};
+}
 
 // Handler for '/start' command - sends a welcome message
 bot.onText(/\/start/, (msg) => {
@@ -173,3 +162,4 @@ Adventure awaits with every command! Let’s make each day more interesting. Rea
 
   bot.sendMessage(msg.chat.id, welcomeMessage, { parse_mode: "Markdown" });
 });
+
