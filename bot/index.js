@@ -3,6 +3,7 @@ import fetch from "node-fetch";
 import dotenv from "dotenv";
 import { CohereClient } from "cohere-ai";
 import sharp from "sharp";
+import express from 'express';
 
 dotenv.config();
 
@@ -14,6 +15,9 @@ const apiHost = "https://api.stability.ai";
 const cohere = new CohereClient({
   token: process.env.COHERE_API_KEY,
 });
+
+const app = express();
+const port = process.env.PORT || 3000;
 
 // Initialize the Telegram Bot
 const bot = new TelegramBot(botToken, { polling: true });
@@ -88,6 +92,10 @@ bot.onText(/\/img (.+)/, async (msg, match) => {
       }
     );
   }
+});
+
+app.listen(port, () => {
+  console.log(`Server is running on port ${port}`);
 });
 
 // Function to combine text from Cohere AI with Stability AI images
